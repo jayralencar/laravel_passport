@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('details', 'UserController@details');
+    Route::put("edit/{id}", "UserController@edit");
 });
 
 Route::post('login', 'UserController@login');

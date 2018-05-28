@@ -37,6 +37,7 @@ class UserController extends Controller
         $user = \App\User::create($input); 
         $success['token'] =  $user->createToken('MyApp')->accessToken; 
         $success['name'] =  $user->name;
+        $success['id'] = $user->id;
         return response()->json(['success'=>$success], 200); 
     }
 
@@ -45,4 +46,22 @@ class UserController extends Controller
         $user = Auth::user(); 
         return response()->json(['success' => $user], 200); 
     } 
+
+    public function edit($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [ 
+            'email' => 'email', 
+        ]);
+
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+
+        $input = $request->all();
+
+        \App\User::where("id", $id)
+            -> update($input);
+        
+        return response()->json(["success" => "Editado com sucesso"]);
+    }
 }
